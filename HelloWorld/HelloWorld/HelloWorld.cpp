@@ -41,6 +41,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,_I
 {
 	MessageBox(NULL,"Welcome!","Hello World",MB_OK | MB_ICONEXCLAMATION);
 	return 0;
+
 }
 #endif
 
