@@ -94,7 +94,7 @@ int Game_Init(HWND hwnd)
 	D3DPRESENT_PARAMETERS d3dpp;
 	ZeroMemory(&d3dpp, sizeof(d3dpp)); // xoa mọi thư vê 0 trươc khi sư dung
 
-	d3dpp.Windowed = FALSE;		// thê hiên ơ chê đô cưa sô (false?)
+	d3dpp.Windowed = FALSE;		// thê hiên ơ chê đô (TRUE: cửa sổ), (FALSE: toàn màn hình)
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8; //>???
 		//-----------------đủ để khơi tao một cửa sổ để co thể vẽ bằng Direct3D.
