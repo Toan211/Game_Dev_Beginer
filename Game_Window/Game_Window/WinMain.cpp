@@ -30,8 +30,9 @@ void Game_End(HWND);
 //cac đôi tượng cua Direct3D trang 103
 LPDIRECT3D9 d3d = NULL;
 LPDIRECT3DDEVICE9 d3ddev = NULL;
-
+//backbuffer kiểu như background, NULL nghĩa là lấy toàn bộ
 LPDIRECT3DSURFACE9 backbuffer = NULL;
+//tao một Direct3D surface bằng việc định nghĩa con trỏ. Đối tượng surface gọi là LPDIRECT3DSURFACE9
 LPDIRECT3DSURFACE9 surface = NULL;
 
 //--------------------------------------------------------------
@@ -94,7 +95,7 @@ int Game_Init(HWND hwnd)
 	D3DPRESENT_PARAMETERS d3dpp;
 	ZeroMemory(&d3dpp, sizeof(d3dpp)); // xoa mọi thư vê 0 trươc khi sư dung
 
-	d3dpp.Windowed = FALSE;		// thê hiên ơ chê đô cưa sô (false?)
+	d3dpp.Windowed = FALSE;		// thê hiên ơ chê đô toàn màn hình (false?)
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8; //>???
 		//-----------------đủ để khơi tao một cửa sổ để co thể vẽ bằng Direct3D.
@@ -127,8 +128,8 @@ int Game_Init(HWND hwnd)
 	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET,
 		D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
 	//create pointer to the back buffer
-	d3ddev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,
-		&backbuffer);
+	d3ddev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,&backbuffer);
+
 	//create surface
 	result = d3ddev->CreateOffscreenPlainSurface(
 		100, //width of the surface
@@ -173,14 +174,18 @@ void Game_Run(HWND hwnd)
 		r = rand() % 255;
 		g = rand() % 255;
 		b = rand() % 255;
-		d3ddev->ColorFill(surface, NULL, D3DCOLOR_XRGB(r, g, b));
-		//copy the surface to the backbuffer
+
+		//Nếu muốn xoa những thứ đang vẽ, ta co thể dùng hàm ColorFill
+		d3ddev->ColorFill(surface, NULL, D3DCOLOR_XRGB(r, g, b)); 
+		
+		//copy the surface to the backbuffer 
 		rect.left = rand() % SCREEN_WIDTH / 2;
 		rect.right = rect.left + rand() % SCREEN_WIDTH / 2;
 		rect.top = rand() % SCREEN_HEIGHT;
 		rect.bottom = rect.top + rand() % SCREEN_HEIGHT / 2;
-		d3ddev->StretchRect(surface, NULL, backbuffer, &rect,
-			D3DTEXF_NONE);
+		
+		//Ta co thể vẽ một surface lên surface khác.Chúng ta co hàm StretchRect.
+		d3ddev->StretchRect(surface, NULL, backbuffer, &rect,D3DTEXF_NONE); 
 		
 		//đanh dâu kêt thuc vẽ môt frame//stop rendering
 		d3ddev->EndScene();
@@ -191,7 +196,7 @@ void Game_Run(HWND hwnd)
 	d3ddev->Present(NULL, NULL, NULL, NULL);
 	//check for escape key (to exit program)
 	if (KEY_DOWN(VK_ESCAPE))
-		PostMessage(hwnd, WM_DESTROY, 0, 0);
+		PostMessage(hwnd, WM_DESTROY, 0, 0); //thoát game//thoát cd toàn màn hình
 }
 
 //------------------------------------------------------------------------------------
@@ -257,7 +262,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		NULL, //menu
 		hInstance, //application instance
 		NULL); //window parameters
-
+	
 	//kiêm tra lôi nêu không tao được cưa sô
 	if (!hWnd)
 		return FALSE;
