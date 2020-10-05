@@ -1,7 +1,7 @@
-﻿#include <Windows.h>
+﻿#include <windows.h>
 //cac file header cân đưa vao
 #include <d3d9.h>
-
+#include <d3dx9.h>
 #include <time.h>
 
 //tiêu đê ưng dung
@@ -36,6 +36,44 @@ LPDIRECT3DSURFACE9 surface = NULL;
 
 //--------------------------------------------------------------
 
+
+//window event callback function
+LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam,
+	LPARAM lParam)
+{
+	switch (msg)
+	{
+	case WM_DESTROY:
+		Game_End(hWnd);
+		PostQuitMessage(0);
+		return 0;
+	}
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
+//cac ham hô trợ đê khơi đông Window
+ATOM MyRegisterClass(HINSTANCE hInstance) //creatGameWindow
+{
+	//create the window class structure
+	WNDCLASSEX wc;
+	wc.cbSize = sizeof(WNDCLASSEX);
+	//điên tham sô ham vao struct
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc = (WNDPROC)WinProc;
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = hInstance;
+	wc.hIcon = NULL;
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	wc.lpszMenuName = NULL;
+	wc.lpszClassName = APPTITLE;
+	wc.hIconSm = NULL;
+	//đăng ky lơp cưa sô
+	return RegisterClassEx(&wc);
+}
+
+
 int Game_Init(HWND hwnd)
 {
 	HRESULT result;
@@ -55,6 +93,7 @@ int Game_Init(HWND hwnd)
 	//set Direct3D presentation parameters
 	D3DPRESENT_PARAMETERS d3dpp;
 	ZeroMemory(&d3dpp, sizeof(d3dpp)); // xoa mọi thư vê 0 trươc khi sư dung
+
 	d3dpp.Windowed = FALSE;		// thê hiên ơ chê đô cưa sô (false?)
 	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
 	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8; //>???
@@ -76,7 +115,7 @@ int Game_Init(HWND hwnd)
 		&d3dpp, // cac tham sô thê hiên cua thiêt bị
 		&d3ddev); // đôi tượng dev được tao ra
 
-#if 0
+#if 1
 	if (d3ddev == NULL)
 	{
 		MessageBox(hwnd, "Error creating Direct3D device","Error", MB_OK);
@@ -110,6 +149,9 @@ int Game_Init(HWND hwnd)
 
 void Game_Run(HWND hwnd)
 {
+	RECT rect;
+	int r, g, b;
+
 	//đam bao con trỏ đên Direct3D la hợp lê
 	if (d3ddev == NULL)
 		return;
@@ -122,18 +164,34 @@ void Game_Run(HWND hwnd)
 			Nếu không xoa, hình anh của những frame trước sẽ còn lai, 
 				kết hợp với những hình anh vẽ ơ frame này
 					sẽ tao ra một đống hỗn độn trên màn hình*/
-	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET,
-		D3DCOLOR_XRGB(0, 255, 0), 1.0f, 0);
+	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 255, 0), 1.0f, 0);
 
 	//đanh dâu băt đâu vẽ môt frame
 	if (d3ddev->BeginScene())
 	{
-		//đanh dâu kêt thuc vẽ môt frame
+		//fill the surface with random color
+		r = rand() % 255;
+		g = rand() % 255;
+		b = rand() % 255;
+		d3ddev->ColorFill(surface, NULL, D3DCOLOR_XRGB(r, g, b));
+		//copy the surface to the backbuffer
+		rect.left = rand() % SCREEN_WIDTH / 2;
+		rect.right = rect.left + rand() % SCREEN_WIDTH / 2;
+		rect.top = rand() % SCREEN_HEIGHT;
+		rect.bottom = rect.top + rand() % SCREEN_HEIGHT / 2;
+		d3ddev->StretchRect(surface, NULL, backbuffer, &rect,
+			D3DTEXF_NONE);
+		
+		//đanh dâu kêt thuc vẽ môt frame//stop rendering
 		d3ddev->EndScene();
 	}
 
 	//đao nôi dung backbuffer lên front buffer để thể hiện frame lên màn hình.
+	//display the back buffer on the screen
 	d3ddev->Present(NULL, NULL, NULL, NULL);
+	//check for escape key (to exit program)
+	if (KEY_DOWN(VK_ESCAPE))
+		PostMessage(hwnd, WM_DESTROY, 0, 0);
 }
 
 //------------------------------------------------------------------------------------
@@ -142,13 +200,19 @@ void Game_Run(HWND hwnd)
 		Khá đơn gian, chỉ cân gọi phương thức Release của chúng*/
 void Game_End(HWND hwnd)
 {
-	MessageBox(hwnd, "Program is about to end","Game_End", MB_OK);
+	MessageBox(hwnd, "Program is about to end", "Game_End", MB_OK);
+	//free the surface
+	surface->Release();
+	
+	//release the Direct3D device
 	if (d3ddev != NULL) d3ddev->Release();
+	//release the Direct3D object
 	if (d3d != NULL) d3d->Release();
 }
 
 
 //------------------------------------------------
+
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -157,6 +221,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	
 	//Ca hai hàm đều nhân tham số là hInstance – định danh của thể hiện truyền từ WinMain.
 	////// đăng ky lơp cưa sô
+	
 	MyRegisterClass(hInstance);
 		
 	//hàm initinstance sẽ tao ra cửa sổ chương trình nếu instance của chúng là instance đâu tiên.
@@ -171,19 +236,35 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//khơi đông bô tao sô ngâu nhiên
 	srand(time(NULL));
-
-	// vong lăp thông điêp chinh
-	/*vòng lăp sẽ chay mãi mãi cho đến khi nhân được một thông điệp 
-		khiến cho hàm GetMessage tra về kết qua false 
-			(thường là thông điệp yêu câu đong cửa sổ ứng dụng).
-	Hàm GetMessage co nhiệm vụ lấy ra một thông điệp
-		trong số những thông điệp Windows gửi đến chương trình trong hàng đợi thông điệp của ứng dụng.*/
-	while (GetMessage(&msg, NULL, 0, 0))
+#if 0
+		while (GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	} //trang 98
 	return msg.wParam;
+#endif
+	//tao môt cưa sô
+	hWnd = CreateWindow(
+		APPTITLE, //window class
+		APPTITLE, //title bar
+		WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP, //window style
+		CW_USEDEFAULT, //x position of window
+		CW_USEDEFAULT, //y position of window
+		SCREEN_WIDTH, //width of the window
+		SCREEN_HEIGHT, //height of the window
+		NULL, //parent window
+		NULL, //menu
+		hInstance, //application instance
+		NULL); //window parameters
+
+	//kiêm tra lôi nêu không tao được cưa sô
+	if (!hWnd)
+		return FALSE;
+
+	//hiên thị cưa sô
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
 
 	//khơi tao game
 	if (!Game_Init(hWnd))
@@ -201,20 +282,28 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 
 			// kiêm tra xem co phai thông điêp thoat?
-			/*Thông điệp sẽ được gửi đến
-				trình khi người dùng thoát chương trình một cách cưỡng bức
-				(như bấm Alt-F4) hoăc chúng ta tự gửi thông điệp khi phát hiện người
-				dùng bấm một phim nào đo như ESC*/
+				/*Thông điệp sẽ được gửi đến
+					trình khi người dùng thoát chương trình một cách cưỡng bức
+					(như bấm Alt-F4) hoăc chúng ta tự gửi thông điệp khi phát hiện người
+					dùng bấm một phim nào đo như ESC*/
 			if (msg.message == WM_QUIT)
 				done = 1;
 
 			//giai ma va truyên thông điêp cho WndProc
+			// vong lăp thông điêp chinh
+				/*vòng lăp sẽ chay mãi mãi cho đến khi nhân được một thông điệp
+					khiến cho hàm GetMessage tra về kết qua false
+						(thường là thông điệp yêu câu đong cửa sổ ứng dụng).
+				Hàm GetMessage co nhiệm vụ lấy ra một thông điệp
+					trong số những thông điệp Windows gửi đến chương trình trong hàng đợi thông điệp của ứng dụng.*/
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 		//process game loop
-		Game_Run(hWnd);
+		else
+			//xư ly game
+			Game_Run(hWnd);
 	}//trang 99-100
-
+	return msg.wParam;
 }
 
