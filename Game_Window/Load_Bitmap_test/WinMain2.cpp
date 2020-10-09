@@ -13,8 +13,8 @@
 #define KEY_UP(vk_code)((GetAsyncKeyState(vk_code) & 0x8000) ? 1: 0)
 
 	//đô phân giai man hinh
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 520
+#define SCREEN_HEIGHT 720
 
 //cac khai bao ham
 LRESULT WINAPI WinProc(HWND, UINT, WPARAM, LPARAM);
@@ -86,7 +86,14 @@ int Game_Init(HWND hwnd)
 	//initialize Direct3D
 	d3d = Direct3DCreate9(D3D_SDK_VERSION);
 	
+	if (d3d == NULL)
+	{
+		MessageBox(hwnd, "Error initializing Direct3D", "Error",
+			MB_OK);
+		return 0;
+	}
 
+	//set Direct3D presentation parameters
 	D3DPRESENT_PARAMETERS d3dpp;
 	ZeroMemory(&d3dpp, sizeof(d3dpp)); // xoa mọi thư vê 0 trươc khi sư dung
 
@@ -108,33 +115,40 @@ int Game_Init(HWND hwnd)
 		&d3dpp, // cac tham sô thê hiên cua thiêt bị
 		&d3ddev); // đôi tượng dev được tao ra
 
-#if 1
-	if (d3ddev == NULL)
-	{
-		
-		MessageBox(hwnd, "Error creating Direct3D device","Error", MB_OK);
-		return 0;
-	}
+
 	//set random number seed
 	srand(time(NULL));
-	//clear the backbuffer to black
-	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET,
-		D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
-	//create pointer to the back buffer
-	d3ddev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,&backbuffer);
 
+	//clear the backbuffer to black
+	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET,D3DCOLOR_XRGB(0, 0, 0), 1.0f, 0);
+	
 	//create surface
 	result = d3ddev->CreateOffscreenPlainSurface(
-		100, //width of the surface
-		100, //height of the surface
+		520, //width of the surface
+		720, //height of the surface
 		D3DFMT_X8R8G8B8, //surface format
 		D3DPOOL_DEFAULT, //memory pool to use
 		&surface, //pointer to the surface
 		NULL); //reserved (always NULL)
-	if (!result)
+
+	if (result != D3D_OK)
 		return 1;
 	
-#endif
+	//load surface from file into newly created surface
+	result = D3DXLoadSurfaceFromFile(
+		surface, //destination surface
+		NULL, //destination palette
+		NULL, //destination rectangle
+		"legotron.jpg", //source filename
+		NULL, //source rectangle
+		D3DX_DEFAULT, //controls how image is filtered
+		0, //for transparency (0 for none)
+		NULL); //source image info (usually NULL)
+
+	//make sure file was loaded okay
+	if (result != D3D_OK)
+		return 1;
+
 	//return okay
 	return 1;
 }
@@ -149,38 +163,23 @@ void Game_Run(HWND hwnd)
 	//đam bao con trỏ đên Direct3D la hợp lê
 	if (d3ddev == NULL)
 		return;
-	//Xoa backbuffer vê mau đen
 	
-		
-	d3ddev->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, 255, 0), 1.0f, 0);
-
 	//đanh dâu băt đâu vẽ môt frame
 	if (d3ddev->BeginScene())
 	{
-		//fill the surface with random color
-		r = rand() % 255;
-		g = rand() % 255;
-		b = rand() % 255;
-
-		//Nếu muốn thay màu những thứ đang vẽ, ta co thể dùng hàm ColorFill
-		d3ddev->ColorFill(surface, NULL, D3DCOLOR_XRGB(r, g, b)); 
+		//create pointer to the back buffer
+		d3ddev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO,&backbuffer);
+		//draw surface to the backbuffer
 		
-		//copy the surface to the backbuffer 
-		rect.left = SCREEN_WIDTH / 10;
-		rect.right = SCREEN_WIDTH / 2;
-		rect.top =  SCREEN_HEIGHT/10;
-		rect.bottom = SCREEN_HEIGHT / 2;
-		
-		//Ta co thể vẽ một surface lên surface khác.Chúng ta co hàm StretchRect.
-		d3ddev->StretchRect(surface, NULL, backbuffer, &rect,D3DTEXF_NONE); 
-		
-		//đanh dâu kêt thuc vẽ môt frame//stop rendering
+		d3ddev->StretchRect(surface, NULL, backbuffer, NULL,D3DTEXF_NONE);
+		//stop rendering
 		d3ddev->EndScene();
 	}
 
 	
 	//display the back buffer on the screen
 	d3ddev->Present(NULL, NULL, NULL, NULL);
+	
 	//check for escape key (to exit program)
 	if (KEY_DOWN(VK_ESCAPE))
 		PostMessage(hwnd, WM_DESTROY, 0, 0); //thoát game//thoát cd toàn màn hình
