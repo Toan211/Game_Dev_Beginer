@@ -64,7 +64,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	hWnd = CreateWindow(
 		APPTITLE, //window class
 		APPTITLE, //title bar
-		style, //window style
+		WS_OVERLAPPEDWINDOW, //window style
 		CW_USEDEFAULT, //x position of window
 		CW_USEDEFAULT, //y position of window
 		SCREEN_WIDTH, //width of the window
@@ -82,6 +82,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	if (!Init_Direct3D(hWnd, SCREEN_WIDTH, SCREEN_HEIGHT,FULLSCREEN))
 		return 0;
 	//initialize the game
+	Game_Init(hWnd);
 	if (!Game_Init(hWnd))
 	{
 		MessageBox(hWnd, "Error initializing the game","Error", MB_OK);

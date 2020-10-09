@@ -14,7 +14,7 @@ int Game_Init(HWND hwnd)
 	//load the sprite animation
 	for (n = 0; n < 6; n++)
 	{
-		sprintf(s, "cat%d.bmp", n + 1);
+		sprintf(s, "cat%d.bmp", n + 1); //important: there must be cat1-cat6.bmp in your project (dont know why 1-6 but not 0-5, though)
 		kitty_image[n] = LoadSurface(s, D3DCOLOR_XRGB(255, 0, 255));
 		if (kitty_image[n] == NULL)
 			return 0;
