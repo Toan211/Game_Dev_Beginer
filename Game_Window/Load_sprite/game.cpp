@@ -14,8 +14,6 @@ int Game_Init(HWND hwnd)
 	int n;
 
 	TCHAR Back[] = _T("background.bmp"); //lmao fking bug (cant not convert from const char* to char*)
-	
-	//back = LoadSurface(b, NULL); //add background
 
 	back = LoadSurface(Back, NULL);
 

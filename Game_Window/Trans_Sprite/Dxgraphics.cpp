@@ -105,7 +105,7 @@ LPDIRECT3DTEXTURE9 LoadTexture(char* filename, D3DCOLOR transcolor)
 		D3DPOOL_DEFAULT, //lơp bô nhơ cho texture
 		D3DX_DEFAULT, //bô lọc hinh anh
 		D3DX_DEFAULT, //bô lọc mip
-		transcolor, //mau chỉ ra trong suôt
+		transcolor, //mau chỉ ra trong suôt  //0 là 0 trong suốt
 		&info, //thông tin têp bitmap (từ têp tai lên)
 		NULL, //đô mau
 		&texture); //texture đich

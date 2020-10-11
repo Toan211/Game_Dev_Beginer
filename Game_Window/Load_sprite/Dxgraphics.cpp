@@ -74,7 +74,7 @@ LPDIRECT3DSURFACE9 LoadSurface( char* filename, D3DCOLOR
 		filename, //source filename
 		NULL, //source rectangle
 		D3DX_DEFAULT, //controls how image is filtered
-		transcolor, //for transparency (0 for none) //trans what?
+		0, //for transparency (0 for none) //trans what?
 		NULL); //source image info (usuallyNULL)
 		//make sure file was loaded okay
 			if (result != D3D_OK)

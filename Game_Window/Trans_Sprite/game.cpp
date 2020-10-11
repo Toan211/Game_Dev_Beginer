@@ -23,7 +23,7 @@ int Game_Init(HWND hwnd)
 		// thiêt lập tên têp
 		sprintf(s, "cat%d.bmp", n + 1);
 		// tai texture vơi mau "hồng" la mau trong suôt
-		kitty_image[n] = LoadTexture(s,D3DCOLOR_XRGB(255, 0, 255));
+		kitty_image[n] = LoadTexture(s,D3DCOLOR_XRGB( 0, 0, 0));
 		if (kitty_image[n] == NULL)
 			return 0;
 	}
@@ -82,8 +82,7 @@ void Game_Run(HWND hwnd)
 		// Băt đâu Sprite Handler
 		sprite_handler->Begin(D3DXSPRITE_ALPHABLEND);
 		// Tao vector đê cập nhật vị tri cua sprite
-		D3DXVECTOR3 position((float)kitty.x,
-			(float)kitty.y, 0);
+		D3DXVECTOR3 position((float)kitty.x,(float)kitty.y, 0);
 		// vẽ sprite
 		sprite_handler->Draw(
 			kitty_image[kitty.curframe],
