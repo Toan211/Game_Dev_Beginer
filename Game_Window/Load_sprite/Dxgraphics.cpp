@@ -47,7 +47,7 @@ int Init_Direct3D(HWND hwnd, int width, int height, int
 		&backbuffer);
 	return 1;
 }
-LPDIRECT3DSURFACE9 LoadSurface(char* filename, D3DCOLOR
+LPDIRECT3DSURFACE9 LoadSurface( char* filename, D3DCOLOR
 	transcolor)
 {
 	LPDIRECT3DSURFACE9 image = NULL;
@@ -74,7 +74,7 @@ LPDIRECT3DSURFACE9 LoadSurface(char* filename, D3DCOLOR
 		filename, //source filename
 		NULL, //source rectangle
 		D3DX_DEFAULT, //controls how image is filtered
-		transcolor, //for transparency (0 fornone)
+		transcolor, //for transparency (0 for none) //trans what?
 		NULL); //source image info (usuallyNULL)
 		//make sure file was loaded okay
 			if (result != D3D_OK)

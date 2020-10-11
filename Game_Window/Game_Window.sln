@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game_Window", "Game_Window\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Load_Bitmap_test", "Load_Bitmap_test\Load_Bitmap_test.vcxproj", "{D260D590-DA77-47F2-82B5-24A229AB9312}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Load_sprite", "Load_sprite\Load_sprite.vcxproj", "{7F40DCA3-03B3-4256-BAD0-2F351D975514}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{D260D590-DA77-47F2-82B5-24A229AB9312}.Release|x64.Build.0 = Release|x64
 		{D260D590-DA77-47F2-82B5-24A229AB9312}.Release|x86.ActiveCfg = Release|Win32
 		{D260D590-DA77-47F2-82B5-24A229AB9312}.Release|x86.Build.0 = Release|Win32
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Debug|x64.ActiveCfg = Debug|x64
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Debug|x64.Build.0 = Debug|x64
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Debug|x86.ActiveCfg = Debug|Win32
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Debug|x86.Build.0 = Debug|Win32
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Release|x64.ActiveCfg = Release|x64
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Release|x64.Build.0 = Release|x64
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Release|x86.ActiveCfg = Release|Win32
+		{7F40DCA3-03B3-4256-BAD0-2F351D975514}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

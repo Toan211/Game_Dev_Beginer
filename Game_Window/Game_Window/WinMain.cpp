@@ -115,7 +115,7 @@ int Game_Init(HWND hwnd)
 		&d3dpp, // cac tham sô thê hiên cua thiêt bị
 		&d3ddev); // đôi tượng dev được tao ra
 
-#if 1
+
 	if (d3ddev == NULL)
 	{
 		MessageBox(hwnd, "Error creating Direct3D device","Error", MB_OK);
@@ -140,7 +140,7 @@ int Game_Init(HWND hwnd)
 	if (!result)
 		return 1;
 	
-#endif
+
 	//return okay
 	return 1;
 }
@@ -268,7 +268,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	//khơi tao game
 	if (!Game_Init(hWnd))
+	{
+		MessageBox(hWnd, "Error initializing the game", "Error", MB_OK);
 		return 0;
+	}
+		
 
 	// vong lăp thông điêp chinh
 	int done = 0;

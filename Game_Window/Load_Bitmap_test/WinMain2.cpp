@@ -249,9 +249,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
+	Game_Init(hWnd);
 	//khơi tao game
 	if (!Game_Init(hWnd))
+	{
+		MessageBox(hWnd, "Error initializing the game", "Error", MB_OK);
 		return 0;
+	}
 
 	// vong lăp thông điêp chinh
 	int done = 0;
