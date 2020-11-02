@@ -4,7 +4,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "dxgraphics.h"
-#include "game.h"
+#include "game"
 //window event callback function
 LRESULT WINAPI WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

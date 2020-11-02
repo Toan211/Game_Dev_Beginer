@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Load_sprite", "Load_sprite\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Trans_Sprite", "Trans_Sprite\Trans_Sprite.vcxproj", "{5E363F74-6C95-42AF-9A3A-00262BB5F7AA}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tyled_Sprite", "Tyled_Sprite\Tyled_Sprite.vcxproj", "{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,14 @@ Global
 		{5E363F74-6C95-42AF-9A3A-00262BB5F7AA}.Release|x64.Build.0 = Release|x64
 		{5E363F74-6C95-42AF-9A3A-00262BB5F7AA}.Release|x86.ActiveCfg = Release|Win32
 		{5E363F74-6C95-42AF-9A3A-00262BB5F7AA}.Release|x86.Build.0 = Release|Win32
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Debug|x64.ActiveCfg = Debug|x64
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Debug|x64.Build.0 = Debug|x64
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Debug|x86.ActiveCfg = Debug|Win32
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Debug|x86.Build.0 = Debug|Win32
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Release|x64.ActiveCfg = Release|x64
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Release|x64.Build.0 = Release|x64
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Release|x86.ActiveCfg = Release|Win32
+		{6B55CE51-8EF1-4F1D-9BED-96BA977A60A5}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
